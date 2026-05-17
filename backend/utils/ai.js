@@ -48,8 +48,12 @@ Respond in the following JSON format ONLY, with no extra text or markdown:
       }
     );
 
-    let resultText = response.data.choices[0].message.content;
+    let resultText = response.data.choices[0].message?.content;
     
+    if (!resultText) {
+      throw new Error(`AI returned empty response. Full response: ${JSON.stringify(response.data)}`);
+    }
+
     // Sometimes free models wrap JSON in markdown blocks even when told not to. Strip them out.
     if (resultText.includes('\`\`\`json')) {
       resultText = resultText.split('\`\`\`json')[1].split('\`\`\`')[0].trim();
