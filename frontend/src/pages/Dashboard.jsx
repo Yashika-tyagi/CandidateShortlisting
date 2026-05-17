@@ -5,7 +5,7 @@ import CandidateList from '../components/CandidateList';
 import JobForm from '../components/JobForm';
 import Shortlist from '../components/Shortlist';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://candidateshortlisting-nfmr.onrender.com/api';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('manage'); // 'manage' or 'shortlist'
