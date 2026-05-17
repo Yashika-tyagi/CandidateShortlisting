@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL = 'meta-llama/llama-3.1-8b-instruct:free'; // Switching to a reliable free model
+const MODEL = 'deepseek/deepseek-v4-flash:free'; // Using an actively supported free model
 
 const analyzeCandidates = async (jobRequirements, candidates) => {
   const apiKey = process.env.OPENROUTER_API_KEY;
