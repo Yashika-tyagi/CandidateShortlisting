@@ -16,12 +16,15 @@ app.use(express.json());
 app.use('/api/candidates', candidateRoutes);
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB Connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+console.log('--- DEBUG INFO ---');
+console.log('Attempting to connect to MongoDB...');
+// Print the first 20 characters of the URI to verify it's not localhost or undefined (while hiding the password)
+const maskedUri = process.env.MONGO_URI ? process.env.MONGO_URI.substring(0, 20) + '...' : 'UNDEFINED!';
+console.log('Using MONGO_URI starting with:', maskedUri);
+
+mongoose.connect(process.env.MONGO_URI)
+.then(() => console.log('✅ MongoDB Successfully Connected!'))
+.catch(err => console.error('❌ MongoDB connection error:', err));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
