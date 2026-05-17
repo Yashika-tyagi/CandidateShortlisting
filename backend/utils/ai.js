@@ -52,8 +52,9 @@ Respond in the following JSON format ONLY:
     const resultText = response.data.choices[0].message.content;
     return JSON.parse(resultText);
   } catch (error) {
-    console.error('Error calling OpenRouter API:', error?.response?.data || error.message);
-    throw new Error('Failed to analyze candidates with AI.');
+    const errorDetails = error?.response?.data || error.message;
+    console.error('Error calling OpenRouter API:', errorDetails);
+    throw new Error(`OpenRouter API Error: ${JSON.stringify(errorDetails)}`);
   }
 };
 
