@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL = 'openai/gpt-3.5-turbo'; // A standard, fast model
+const MODEL = 'meta-llama/llama-3.1-8b-instruct:free'; // Switching to a reliable free model
 
 const analyzeCandidates = async (jobRequirements, candidates) => {
   const apiKey = process.env.OPENROUTER_API_KEY;
@@ -19,7 +19,7 @@ ${candidates.map((c, index) => `${index + 1}. ${c.name} - ${c.skills.join(', ')}
 Task:
 Analyze the candidates against the job requirements. Rank them from best match to worst match.
 Explain why each candidate is suitable or not suitable. Keep the explanations concise (1-2 sentences per candidate).
-Respond in the following JSON format ONLY:
+Respond in the following JSON format ONLY, with no extra text or markdown:
 {
   "rankedCandidates": [
     {
@@ -36,8 +36,7 @@ Respond in the following JSON format ONLY:
       OPENROUTER_API_URL,
       {
         model: MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        response_format: { type: "json_object" }
+        messages: [{ role: 'user', content: prompt }]
       },
       {
         headers: {
@@ -49,7 +48,15 @@ Respond in the following JSON format ONLY:
       }
     );
 
-    const resultText = response.data.choices[0].message.content;
+    let resultText = response.data.choices[0].message.content;
+    
+    // Sometimes free models wrap JSON in markdown blocks even when told not to. Strip them out.
+    if (resultText.includes('\`\`\`json')) {
+      resultText = resultText.split('\`\`\`json')[1].split('\`\`\`')[0].trim();
+    } else if (resultText.includes('\`\`\`')) {
+      resultText = resultText.split('\`\`\`')[1].split('\`\`\`')[0].trim();
+    }
+
     return JSON.parse(resultText);
   } catch (error) {
     const errorDetails = error?.response?.data || error.message;
