@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL = 'deepseek/deepseek-v4-flash:free'; // Using an actively supported free model
+const MODEL = 'google/gemma-4-31b-it:free'; // Switching to Gemma as Deepseek is returning garbage output
 
 const analyzeCandidates = async (jobRequirements, candidates) => {
   const apiKey = process.env.OPENROUTER_API_KEY;
